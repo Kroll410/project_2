@@ -1,0 +1,15 @@
+.push-down-containers{
+    margin-bottom: 30px;
+}
+
+
+.table-card{
+    display: flex;
+    justify-content: space-between;
+}
+
+.tables-preview{
+    display: flex;
+    flex-wrap: wrap;
+
+}

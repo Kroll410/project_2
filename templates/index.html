@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %} Main Page {% endblock %}
+
+{% block content %}
+
+
+<div class="jumbotron push-down-containers">
+    <h1 class="display-4">Hello, world!</h1>
+    <p class="lead">This is a simple admin service application for the computer club.
+        <br>
+        Try it by yourself!
+    </p>
+    <hr class="my-4">
+
+</div>
+
+
+<div class="container push-down-containers">
+    <form action="{{ url_for('show_tables') }}" method="GET">
+        <div class="d-grid gap">
+            <button class="btn btn-primary" type="submit">Go to available tables</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

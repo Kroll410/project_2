@@ -1,0 +1,36 @@
+{% extends 'show-tables.html' %}
+
+{% block title %} Add new el {% endblock%}
+
+{% block content %}
+
+<div class="container">
+    <form action="/{{data['name']|lower}}" method="POST">
+
+
+        {% for user_field in data['fields'] %}
+        <label for="value-1">{{ user_field }}: </label>
+        <input type="text" name="{{ user_field }}">
+        {% endfor %}
+        {% for name, relation in data['relations'].items() %}
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">{{name}}</label>
+            </div>
+            {% for val_name, values in relation.items() %}
+            <select class="custom-select" id="inputGroupSelect01" name="{{ name }}.{{ val_name }}">
+                <option selected>Choose...</option>
+                {% for val in values %}
+                <option value="{{ val }}">{{ val }}</option>
+                {% endfor %}
+            </select>
+            {% endfor %}
+
+        </div>
+        {% endfor %}
+        <br>
+        <button type="submit" class="btn btn-outline-primary btn-sm">Submit</button>
+    </form>
+</div>
+
+{% endblock %}
