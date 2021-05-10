@@ -14,11 +14,14 @@ class Customers(db.Model):
         self.login_name = login_name
         self.added_date = dt.now().strftime('%m/%d/%Y %H:%M:%S')
 
+    def update(self, login_name):
+        self.login_name = login_name
+
     def get_info_dict(self):
         return {
             'id': self.id,
             'login_name': self.login_name,
-            'added_date_TIMESTAMP': self.added_date
+            'added_date': self.added_date
         }
 
     def to_dict(self):
@@ -29,8 +32,11 @@ class Customers(db.Model):
     def get_relations(self):
         return {}
 
+    def get_related_in(self):
+        return [Orders]
+
     def __repr__(self):
-        return f'Customer({self.login_name}, {self.added_date})'
+        return f'Customer({self.login_name})'
 
 
 class Platformtypes(db.Model):
@@ -42,6 +48,9 @@ class Platformtypes(db.Model):
     platform = db.relationship('Platforms', backref='platform', uselist=False, cascade="all, delete, delete-orphan")
 
     def __init__(self, type):
+        self.type = type
+
+    def update(self, type):
         self.type = type
 
     def get_info_dict(self):
@@ -57,6 +66,9 @@ class Platformtypes(db.Model):
 
     def get_relations(self):
         return {}
+
+    def get_related_in(self):
+        return [Platforms]
 
     def __repr__(self):
         return f'PlatformType({self.type})'
@@ -75,6 +87,10 @@ class Platforms(db.Model):
         self.price = price
         self.type_id = type_id
 
+    def update(self, price, type_id):
+        self.price = price
+        self.type_id = type_id
+
     def get_info_dict(self):
         return {
             'id': self.id,
@@ -84,13 +100,21 @@ class Platforms(db.Model):
 
     def to_dict(self):
         return {
-
             'price': self.price,
         }
 
     def get_relations(self):
         return {
             'Platformtypes': ['id'],
+        }
+
+    def get_related_in(self):
+        return [Orders]
+
+    def with_relations_fields(self):
+        return {
+            'price': self.price,
+            'type_id': self.type_id,
         }
 
     def __repr__(self):
@@ -115,11 +139,17 @@ class Orders(db.Model):
         self.customer_id = customer_id
         self.platform_id = platform_id
 
+    def update(self, play_time, customer_id, platform_id):
+        self.added_time_TIMESTAMP = dt.timestamp(dt.now())
+        self.play_time = play_time
+        self.customer_id = customer_id
+        self.platform_id = platform_id
+
     def get_info_dict(self):
         return {
             'id': self.id,
             'price': self.price,
-            'added_time': self.added_time_TIMESTAMP,
+            'added_time_TIMESTAMP': self.added_time_TIMESTAMP,
             'play_time': self.play_time,
             'customer_id': self.customer_id,
             'platform_id': self.platform_id
@@ -136,8 +166,15 @@ class Orders(db.Model):
             'Platforms': ['id']
         }
 
+    def with_relations_fields(self):
+        return {
+            'play_time': self.play_time,
+            'customer_id': self.customer_id,
+            'platform_id': self.platform_id,
+        }
+
     def __repr__(self):
-        return f'Order({self.play_time}, {self.customer_id}, {self.platform_id}, {self.price})'
+        return f'Order({self.play_time}, {self.customer_id}, {self.platform_id})'
 
 
 MODELS = {

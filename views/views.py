@@ -1,13 +1,16 @@
-from flask import render_template, request, make_response
-from werkzeug.utils import redirect
-
+from flask import render_template, request
+from helpers.checker import get_orders_timeout
 from init import app
 from service import crud_operations as crud
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    timeout = get_orders_timeout()
+    print(timeout)
+    return render_template('index.html', data={
+        'timeout': timeout
+    })
 
 
 @app.route('/show_tables')
@@ -22,7 +25,7 @@ def show_tables(table_name=None):
 
             return render_template('show-tables.html', data={
                 'name': table_name,
-                'table_data': table_data,
+                'table_data': enumerate(table_data),
                 'fields': fields,
                 'is_empty': is_empty,
             })
@@ -50,13 +53,18 @@ def add(table_name):
 @app.route('/edit/<string:table_name>/<int:id>', methods=["GET"])
 def edit(table_name, id):
     if request.method == 'GET':
+
         fields = crud.get_table_fields(table_name)
         relations = crud.get_table_relations_data(table_name)
         row_data = crud.get_row_data_from_table(table_name, id)
-        print(row_data)
+
+        if table_name == 'Orders':
+            relations['Platforms']['id'].append(row_data['platform_id'])
+
         return render_template('edit-row.html', data={
+            'id': id,
             'name': table_name,
             'fields': fields,
             'relations': relations,
-            'row_data': row_data,
+            'row_data': row_data.values(),
         })

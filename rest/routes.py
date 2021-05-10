@@ -1,9 +1,7 @@
-from flask import request, url_for, render_template
+from flask import request, url_for
 from flask_restful import Resource
 from werkzeug.utils import redirect
-
-from models import Customers, Platforms, Platformtypes
-from init import db, api
+from init import api
 from service import crud_operations as crud, aggregate
 
 
@@ -16,23 +14,20 @@ class OrderListApi(Resource):
 
         return orders, 200
 
-    def post(self):
+    def post(self, id=None):
         if request.form:
-            crud.insert_into_table('Orders', request.form)
+            if id:
+                crud.insert_into_table('Orders', request.form, id=id)
+            else:
+                crud.insert_into_table('Orders', request.form)
+
             aggregate._set_price_for_orders()
-            return redirect('show_tables/Orders')
-
-    def patch(self):
-        pass
-
-    def put(self, id):
-        if id:
-            pass
+            return redirect('../show_tables/Orders')
 
     def delete(self, id):
         if id:
             crud.delete_from_table('Orders', id)
-            return redirect('orders')
+            return redirect(url_for('show_tables'))
 
 
 class CustomerListApi(Resource):
@@ -44,16 +39,13 @@ class CustomerListApi(Resource):
 
         return customers, 200
 
-    def post(self):
-        if request.form:
+    def post(self, id=None):
+        if id:
+            crud.insert_into_table('Customers', request.form, id=id)
+        else:
             crud.insert_into_table('Customers', request.form)
-            return redirect('show_tables/Customers')
 
-    def patch(self):
-        pass
-
-    def put(self):
-        pass
+        return redirect('../show_tables/Customers')
 
     def delete(self, id):
         if id:
@@ -70,16 +62,13 @@ class PlatformListApi(Resource):
 
         return platforms, 200
 
-    def post(self):
-        if request.form:
-            crud.insert_into_table('Platforms', request.form)
-            return redirect('show_tables/Platforms')
+    def post(self, id=None):
+        if id:
+            crud.insert_into_table('Platforms', request.form, id=id)
+        else:
+            crud.insert_into_table('Customers', request.form)
 
-    def patch(self):
-        pass
-
-    def put(self):
-        pass
+        return redirect('../show_tables/Platforms')
 
     def delete(self, id):
         if id:
@@ -96,16 +85,13 @@ class PlatformTypeListApi(Resource):
 
         return platformtypes, 200
 
-    def post(self):
-        if request.form:
+    def post(self, id=None):
+        if id:
+            crud.insert_into_table('Platformtypes', request.form, id=id)
+        else:
             crud.insert_into_table('Platformtypes', request.form)
-            return redirect('show_tables/Platformtypes')
 
-    def patch(self):
-        pass
-
-    def put(self):
-        pass
+        return redirect('../show_tables/PlatformTypes')
 
     def delete(self, id):
         if id:

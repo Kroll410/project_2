@@ -47,8 +47,8 @@
         </tr>
         </thead>
         <tbody>
-        {% for row in data['table_data'] %}
-        <tr>
+        {% for idx, row in data['table_data'] %}
+        <tr id="row-{{ idx }}">
             {% set curr_id = row.values()|first %}
             {% for el in row.values() %}
             <td>{{ el }}</td>
@@ -67,7 +67,6 @@
                             onclick="delete_request(event, '/{{ data['name']|lower }}/{{ curr_id }}')">
                         Remove
                     </button>
-
                 </form>
             </td>
             {% endif %}

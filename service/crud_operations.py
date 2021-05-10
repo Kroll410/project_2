@@ -35,14 +35,18 @@ def get_all_tables_info() -> dict:
 def get_table_relations_data(table_name):
     relation_data = MODELS[table_name].get_relations(MODELS[table_name])
     table_relations = {}
+
     for idx, pair in enumerate(relation_data.items()):
+
         t_name = pair[0]
         curr_table_relations = {}
+
         for field in pair[1]:
             if field == 'id':
                 curr_table_relations.update({
                     'id': [x + 1 for x in range(len(select_from_table(t_name)))]
                 })
+
         table_relations.update({
             t_name: curr_table_relations
         })
@@ -52,7 +56,6 @@ def get_table_relations_data(table_name):
             if (_id := row['platform_id']) in table_relations['Platforms']['id']:
                 table_relations['Platforms']['id'].remove(_id)
 
-    print(table_relations)
     return table_relations
 
 
@@ -66,10 +69,14 @@ def get_table_info_fields(table_name):
     return table.get_info_dict(table).keys()
 
 
-def insert_into_table(table_name, data):
-    table_row = MODELS[table_name](*data.values())
-    db.session.add(table_row)
-    db.session.commit()
+def insert_into_table(table_name, data, id=None):
+    if not id:
+        table_row = MODELS[table_name](*data.values())
+        db.session.add(table_row)
+        db.session.commit()
+    else:
+        MODELS[table_name].query.get(id).update(*dict(data).values())
+        db.session.commit()
 
 
 def delete_from_table(table_name, row_id):
@@ -80,4 +87,10 @@ def delete_from_table(table_name, row_id):
 
 def get_row_data_from_table(table_name, row_id):
     table = MODELS[table_name]
-    return db.session.query(table).filter(table.id == row_id).first()
+    data = db.session.query(table).filter(table.id == row_id).first()
+    if table_name in ('Orders', 'Platforms'):
+        data = data.with_relations_fields()
+    else:
+        data = data.to_dict()
+
+    return data

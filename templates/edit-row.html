@@ -3,14 +3,11 @@
 {% block title %} Add new el {% endblock%}
 
 {% block content %}
-
 <div class="container">
-    <form action="/{{data['name']|lower}}" method="POST">
-
-
+    <form method="post" action="/{{ data['name']|lower }}/{{ data['id'] }}">
         {% for user_field in data['fields'] %}
         <label for="value-1">{{ user_field }}: </label>
-        <input type="text" name="{{ user_field }}">
+        <input type="text" value="{{ data['row_data'][user_field] }}" name="{{ user_field }}">
         {% endfor %}
         {% for name, relation in data['relations'].items() %}
         <div class="input-group mb-3">
@@ -19,17 +16,17 @@
             </div>
             {% for val_name, values in relation.items() %}
             <select class="custom-select" id="inputGroupSelect01" name="{{ name }}.{{ val_name }}">
-                <option selected>Choose...</option>
+                <option selected>Select...</option>
                 {% for val in values %}
                 <option value="{{ val }}">{{ val }}</option>
                 {% endfor %}
             </select>
             {% endfor %}
-
         </div>
         {% endfor %}
         <br>
-        <button type="submit" class="btn btn-outline-primary btn-sm">Submit</button>
+        <button type="submit" class="btn btn-outline-primary btn-sm">Submit
+        </button>
     </form>
 </div>
 

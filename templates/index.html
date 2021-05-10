@@ -15,13 +15,41 @@
 
 </div>
 
-
 <div class="container push-down-containers">
     <form action="{{ url_for('show_tables') }}" method="GET">
         <div class="d-grid gap">
+            {% if data['timeout'] %}
+            <button class="btn btn-primary" type="submit" disabled>Go to available tables</button>
+            {% else %}
             <button class="btn btn-primary" type="submit">Go to available tables</button>
+            {% endif %}
         </div>
     </form>
 </div>
 
+{% if data['timeout'] %}
+<div>
+    {% for row in data['timeout'] %}
+    <div class="card">
+        <div class="card-header">
+            <h4>Time is up!</h4>
+        </div>
+
+        <div class="card-body">
+            <h5 class="card-title">Order №{{ row['order_id'] }}</h5>
+            <p class="card-text">On platform №{{ row['platform_id'] }}</p>
+            <p class="card-text">Price to pay — {{ row['price'] }} UAH</p>
+            <form>
+                <button type="submit" class="btn btn-outline-danger btn-sm"
+                        onclick="delete_request(event, '/orders/{{ row['order_id'] }}')">
+                    Remove
+                </button>
+            </form>
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<br>
+{% endif %}
 {% endblock %}
