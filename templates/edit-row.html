@@ -4,11 +4,6 @@
 
 {% block content %}
 
-{% if data['name'] == 'Orders' and not data['relations']['Platforms']['id']%}
-
-<h1>There are no available platforms to play</h1>
-
-{% else %}
 <div class="container">
     <form action="/{{data['name']|lower}}" method="POST">
 
@@ -37,5 +32,5 @@
         <button type="submit" class="btn btn-outline-primary btn-sm">Submit</button>
     </form>
 </div>
-{% endif %}
+
 {% endblock %}

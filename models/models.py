@@ -16,6 +16,7 @@ class Customers(db.Model):
 
     def get_info_dict(self):
         return {
+            'id': self.id,
             'login_name': self.login_name,
             'added_date_TIMESTAMP': self.added_date
         }
@@ -45,6 +46,7 @@ class Platformtypes(db.Model):
 
     def get_info_dict(self):
         return {
+            'id': self.id,
             'type': self.type
         }
 
@@ -75,12 +77,14 @@ class Platforms(db.Model):
 
     def get_info_dict(self):
         return {
+            'id': self.id,
             'price': self.price,
             'type_id': self.type_id,
         }
 
     def to_dict(self):
         return {
+
             'price': self.price,
         }
 
@@ -102,7 +106,7 @@ class Orders(db.Model):
     play_time = db.Column(db.Float, nullable=False)
 
     customer_id = db.Column(db.Integer, db.ForeignKey('Customers.id'), nullable=False)
-    platform_id = db.Column(db.Integer, db.ForeignKey('Platforms.id'), nullable=False)
+    platform_id = db.Column(db.Integer, db.ForeignKey('Platforms.id'), nullable=False, unique=True)
 
     def __init__(self, play_time, customer_id, platform_id):
         self.price = 0
@@ -113,6 +117,7 @@ class Orders(db.Model):
 
     def get_info_dict(self):
         return {
+            'id': self.id,
             'price': self.price,
             'added_time': self.added_time_TIMESTAMP,
             'play_time': self.play_time,

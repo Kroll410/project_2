@@ -34,7 +34,6 @@ def get_all_tables_info() -> dict:
 
 def get_table_relations_data(table_name):
     relation_data = MODELS[table_name].get_relations(MODELS[table_name])
-
     table_relations = {}
     for idx, pair in enumerate(relation_data.items()):
         t_name = pair[0]
@@ -44,18 +43,27 @@ def get_table_relations_data(table_name):
                 curr_table_relations.update({
                     'id': [x + 1 for x in range(len(select_from_table(t_name)))]
                 })
-            # else:
-            #     for row in select_from_table(t_name):
-            #         curr_data = row[field]
-            #         curr_table_relations.update({
-            #             field: [x for x in select_from_table(t_name)[field]]
-            #         })
         table_relations.update({
             t_name: curr_table_relations
         })
 
-    # print(table_relations)
+    if table_name == 'Orders':
+        for row in select_from_table(table_name, show_all=True):
+            if (_id := row['platform_id']) in table_relations['Platforms']['id']:
+                table_relations['Platforms']['id'].remove(_id)
+
+    print(table_relations)
     return table_relations
+
+
+def get_table_fields(table_name):
+    table = MODELS[table_name]
+    return table.to_dict(table).keys()
+
+
+def get_table_info_fields(table_name):
+    table = MODELS[table_name]
+    return table.get_info_dict(table).keys()
 
 
 def insert_into_table(table_name, data):
@@ -68,3 +76,8 @@ def delete_from_table(table_name, row_id):
     table = MODELS[table_name]
     db.session.query(table).filter(table.id == row_id).delete(synchronize_session=False)
     db.session.commit()
+
+
+def get_row_data_from_table(table_name, row_id):
+    table = MODELS[table_name]
+    return db.session.query(table).filter(table.id == row_id).first()

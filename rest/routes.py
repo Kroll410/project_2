@@ -1,10 +1,10 @@
-from flask import request
+from flask import request, url_for, render_template
 from flask_restful import Resource
 from werkzeug.utils import redirect
 
-from models import Orders, Customers, Platforms, Platformtypes
+from models import Customers, Platforms, Platformtypes
 from init import db, api
-from service import crud_operations as crud
+from service import crud_operations as crud, aggregate
 
 
 class OrderListApi(Resource):
@@ -19,30 +19,30 @@ class OrderListApi(Resource):
     def post(self):
         if request.form:
             crud.insert_into_table('Orders', request.form)
+            aggregate._set_price_for_orders()
             return redirect('show_tables/Orders')
 
     def patch(self):
         pass
 
-    def put(self):
-        pass
+    def put(self, id):
+        if id:
+            pass
 
     def delete(self, id):
         if id:
             crud.delete_from_table('Orders', id)
+            return redirect('orders')
 
 
 class CustomerListApi(Resource):
     def get(self, id=None):
-        if not id:
-            customers = db.session.query(Customers)
-            return [el.to_dict() for el in customers], 200
+        customers = crud.select_from_table('customers', id)
 
-        customer = db.session.query(Customers).filter_by(id=id).first()
-        if not customer:
+        if not customers:
             return {}, 404
 
-        return customer.to_dict(), 200
+        return customers, 200
 
     def post(self):
         if request.form:
@@ -56,20 +56,19 @@ class CustomerListApi(Resource):
         pass
 
     def delete(self, id):
-        print(id)
+        if id:
+            crud.delete_from_table('Customers', id)
+            return redirect('customers')
 
 
 class PlatformListApi(Resource):
     def get(self, id=None):
-        if not id:
-            platforms = db.session.query(Platforms)
-            return [el.to_dict() for el in platforms], 200
+        platforms = crud.select_from_table('platforms', id)
 
-        platform = db.session.query(Platforms).filter_by(id=id).first()
-        if not platform:
+        if not platforms:
             return {}, 404
 
-        return platform.to_dict(), 200
+        return platforms, 200
 
     def post(self):
         if request.form:
@@ -82,21 +81,20 @@ class PlatformListApi(Resource):
     def put(self):
         pass
 
-    def delete(self):
-        pass
+    def delete(self, id):
+        if id:
+            crud.delete_from_table('Platforms', id)
+            return redirect('platforms')
 
 
 class PlatformTypeListApi(Resource):
     def get(self, id=None):
-        if not id:
-            platforms_types = db.session.query(Platformtypes)
-            return [el.to_dict() for el in platforms_types], 200
+        platformtypes = crud.select_from_table('platformtypes', id)
 
-        platform_type = db.session.query(Platformtypes).filter_by(id=id).first()
-        if not platform_type:
+        if not platformtypes:
             return {}, 404
 
-        return platform_type.to_dict(), 200
+        return platformtypes, 200
 
     def post(self):
         if request.form:
@@ -109,8 +107,10 @@ class PlatformTypeListApi(Resource):
     def put(self):
         pass
 
-    def delete(self):
-        pass
+    def delete(self, id):
+        if id:
+            crud.delete_from_table('Platformtypes', id)
+            return redirect('platformtypes')
 
 
 api.add_resource(OrderListApi, '/orders', '/orders/<id>', strict_slashes=False)

@@ -5,12 +5,7 @@ from config import Config
 
 con = db.create_engine(Config.SQLALCHEMY_DATABASE_URI, {})
 meta = db.MetaData(bind=con)
-
-
-# TODO: complete updates after table initialization (e.g. `price` for `Order`)
-def _set_price_for_orders():
-    for model in MODELS:
-        print(crud.select_from_table(model))
+from service import aggregate
 
 
 def init_db():
@@ -34,4 +29,7 @@ def init_db():
     db.session.add(order)
     db.session.commit()
 
-    # _set_price_for_orders()
+    # order = Orders(2.0, 1, 2)
+    # db.session.add(order)
+    # db.session.commit()
+    aggregate._set_price_for_orders()

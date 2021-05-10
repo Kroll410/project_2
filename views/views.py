@@ -18,11 +18,11 @@ def show_tables(table_name=None):
             table_name = str(table_name).capitalize()
             table_data = crud.select_from_table(table_name, show_all=True)
             is_empty = True if not table_data else False
-            fields = ['id'] + list(table_data[0].keys()) if not is_empty else []
+            fields = crud.get_table_info_fields(table_name) if not is_empty else []
 
             return render_template('show-tables.html', data={
                 'name': table_name,
-                'table_data': enumerate(table_data),
+                'table_data': table_data,
                 'fields': fields,
                 'is_empty': is_empty,
             })
@@ -37,12 +37,26 @@ def show_tables(table_name=None):
 @app.route('/add/<string:table_name>', methods=["GET"])
 def add(table_name):
     if request.method == 'GET':
-        table_data = crud.select_from_table(table_name)
-        fields = list(table_data[0].keys())
+        fields = crud.get_table_fields(table_name)
         relations = crud.get_table_relations_data(table_name)
 
         return render_template('add-new-row.html', data={
             'name': table_name,
             'fields': fields,
             'relations': relations,
+        })
+
+
+@app.route('/edit/<string:table_name>/<int:id>', methods=["GET"])
+def edit(table_name, id):
+    if request.method == 'GET':
+        fields = crud.get_table_fields(table_name)
+        relations = crud.get_table_relations_data(table_name)
+        row_data = crud.get_row_data_from_table(table_name, id)
+        print(row_data)
+        return render_template('edit-row.html', data={
+            'name': table_name,
+            'fields': fields,
+            'relations': relations,
+            'row_data': row_data,
         })

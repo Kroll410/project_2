@@ -47,24 +47,27 @@
         </tr>
         </thead>
         <tbody>
-        {% for idx, row in data['table_data'] %}
+        {% for row in data['table_data'] %}
         <tr>
-            <td scope="row">{{ idx + 1 }}</td>
+            {% set curr_id = row.values()|first %}
             {% for el in row.values() %}
             <td>{{ el }}</td>
             {% endfor%}
             {% if el == row[-1] %}
             <td width=50px;>
-                <form>
-                    <button type="submit" class="btn btn-outline-primary btn-sm">Edit</button>
+                <form action="/edit/{{ data['name'] }}/{{ curr_id }}" method="get">
+                    <button type="submit" class="btn btn-outline-primary btn-sm">Edit
+                    </button>
                 </form>
             </td>
             <td width=80px;>
                 <form>
+
                     <button type="submit" class="btn btn-outline-danger btn-sm"
-                            onclick="delete_request(event, '/{{ data['name']|lower }}/{{ idx + 1}}')">
+                            onclick="delete_request(event, '/{{ data['name']|lower }}/{{ curr_id }}')">
                         Remove
                     </button>
+
                 </form>
             </td>
             {% endif %}
