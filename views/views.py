@@ -7,7 +7,6 @@ from service import crud_operations as crud
 @app.route('/')
 def index():
     timeout = get_orders_timeout()
-    print(timeout)
     return render_template('index.html', data={
         'timeout': timeout
     })

@@ -1,5 +1,4 @@
-from models import Customers, Orders, Platforms, Platformtypes, MODELS
-from service import crud_operations as crud
+from models import Customers, Orders, Platforms, Platformtypes
 from init import db
 from config import Config
 
@@ -29,7 +28,4 @@ def init_db():
     db.session.add(order)
     db.session.commit()
 
-    # order = Orders(2.0, 1, 2)
-    # db.session.add(order)
-    # db.session.commit()
     aggregate._set_price_for_orders()

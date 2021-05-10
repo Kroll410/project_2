@@ -66,7 +66,7 @@ class PlatformListApi(Resource):
         if id:
             crud.insert_into_table('Platforms', request.form, id=id)
         else:
-            crud.insert_into_table('Customers', request.form)
+            crud.insert_into_table('Platforms', request.form)
 
         return redirect('../show_tables/Platforms')
 
