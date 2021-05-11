@@ -24,12 +24,19 @@
 
 <div class="btn-group" role="group" style="float: right;">
     <form action="/add/{{ data['name'] }}" method="GET">
+        {% if data['is_order_timeout'] %}
+        <button type="submit" class="btn btn-outline-success" disabled>Add row</button>
+        {% else %}
         <button type="submit" class="btn btn-outline-success">Add row</button>
+        {% endif %}
     </form>
 </div>
 
 <div class="container" style="text-align: center;">
     <h2>{{ data['name'] }} table</h2>
+    {% if data['is_order_timeout'] %}
+    <h6>Some order time is expired. Check main page</h6>
+    {% endif %}
 </div>
 
 
@@ -56,8 +63,11 @@
             {% if el == row[-1] %}
             <td width=50px;>
                 <form action="/edit/{{ data['name'] }}/{{ curr_id }}" method="get">
-                    <button type="submit" class="btn btn-outline-primary btn-sm">Edit
-                    </button>
+                    {% if data['is_order_timeout'] %}
+                    <button type="submit" class="btn btn-outline-primary btn-sm" disabled>Edit</button>
+                    {% else %}
+                    <button type="submit" class="btn btn-outline-primary btn-sm">Edit</button>
+                    {% endif %}
                 </form>
             </td>
             <td width=80px;>

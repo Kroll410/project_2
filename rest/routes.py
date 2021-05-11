@@ -1,3 +1,5 @@
+import time
+
 from flask import request, url_for
 from flask_restful import Resource
 from werkzeug.utils import redirect
@@ -20,7 +22,6 @@ class OrderListApi(Resource):
                 crud.insert_into_table('Orders', request.form, id=id)
             else:
                 crud.insert_into_table('Orders', request.form)
-
             aggregate._set_price_for_orders()
             return redirect('../show_tables/Orders')
 

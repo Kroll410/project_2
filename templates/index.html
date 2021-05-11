@@ -32,11 +32,11 @@
     {% for row in data['timeout'] %}
     <div class="card">
         <div class="card-header">
-            <h4>Time is up!</h4>
+            <h4>Order №{{ row['order_id'] }}</h4>
         </div>
 
         <div class="card-body">
-            <h5 class="card-title">Order №{{ row['order_id'] }}</h5>
+            <h5 class="card-title">Time is up</h5>
             <p class="card-text">On platform №{{ row['platform_id'] }}</p>
             <p class="card-text">Price to pay — {{ row['price'] }} UAH</p>
             <form>
@@ -48,8 +48,9 @@
 
         </div>
     </div>
+    <br>
     {% endfor %}
 </div>
-<br>
+
 {% endif %}
 {% endblock %}

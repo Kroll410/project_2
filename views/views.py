@@ -22,11 +22,14 @@ def show_tables(table_name=None):
             is_empty = True if not table_data else False
             fields = crud.get_table_info_fields(table_name) if not is_empty else []
 
+            timeout = get_orders_timeout()
+
             return render_template('show-tables.html', data={
                 'name': table_name,
                 'table_data': enumerate(table_data),
                 'fields': fields,
                 'is_empty': is_empty,
+                'is_order_timeout': bool(timeout),
             })
 
         else:

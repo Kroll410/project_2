@@ -1,6 +1,9 @@
-from models import Customers, Orders, Platforms, Platformtypes
+import sqlalchemy
+
 from init import db
 from config import Config
+import os
+from config import SQL_DIR
 
 con = db.create_engine(Config.SQLALCHEMY_DATABASE_URI, {})
 meta = db.MetaData(bind=con)
@@ -10,22 +13,7 @@ from service import aggregate
 def init_db():
     db.drop_all()
     db.create_all()
-    customer = Customers('some_guy')
-    db.session.add(customer)
-    customer = Customers('another_guy')
-    db.session.add(customer)
-    db.session.commit()
-
-    platform_type = Platformtypes('PC')
-    db.session.add(platform_type)
-    db.session.commit()
-
-    platform = Platforms(type_id=1, price=199)
-    db.session.add(platform)
-    db.session.commit()
-
-    order = Orders(2.0, customer.id, platform.id)
-    db.session.add(order)
-    db.session.commit()
-
-    aggregate._set_price_for_orders()
+    for filename in [x for x in os.listdir('/home/rabb1t/PycharmProjects/project_2/sql') if x.endswith('.sql')]:
+        with open(f'{SQL_DIR}/{filename}', 'r') as file:
+            for query in [x.strip() for x in file.read().split('--')]:
+                con.execute(query)

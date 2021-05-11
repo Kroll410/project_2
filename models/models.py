@@ -43,7 +43,7 @@ class Platformtypes(db.Model):
     __tablename__ = 'Platformtypes'
 
     id = db.Column(db.Integer, primary_key=True)
-    type = db.Column(db.String(10), nullable=False, unique=True)
+    type = db.Column(db.String(40), nullable=False, unique=True)
 
     platform = db.relationship('Platforms', backref='platform', uselist=False, cascade="all, delete, delete-orphan")
 
@@ -125,8 +125,8 @@ class Orders(db.Model):
     __tablename__ = 'Orders'
 
     id = db.Column(db.Integer, primary_key=True)
-    price = db.Column(db.Float, nullable=False)
-    added_time_TIMESTAMP = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Float, server_default='0.0')
+    added_time = db.Column(db.String(100), nullable=False)
     play_time = db.Column(db.Float, nullable=False)
 
     customer_id = db.Column(db.Integer, db.ForeignKey('Customers.id'), nullable=False)
@@ -134,13 +134,13 @@ class Orders(db.Model):
 
     def __init__(self, play_time, customer_id, platform_id):
         self.price = 0
-        self.added_time_TIMESTAMP = dt.timestamp(dt.now())
+        self.added_time = str(dt.now().strftime('%Y-%m-%d %H:%M:%S'))
         self.play_time = play_time
         self.customer_id = customer_id
         self.platform_id = platform_id
 
     def update(self, play_time, customer_id, platform_id):
-        self.added_time_TIMESTAMP = dt.timestamp(dt.now())
+        self.added_time = str(dt.now().strftime('%Y-%m-%d %H:%M:%S'))
         self.play_time = play_time
         self.customer_id = customer_id
         self.platform_id = platform_id
@@ -149,7 +149,7 @@ class Orders(db.Model):
         return {
             'id': self.id,
             'price': self.price,
-            'added_time_TIMESTAMP': self.added_time_TIMESTAMP,
+            'added_time': self.added_time,
             'play_time': self.play_time,
             'customer_id': self.customer_id,
             'platform_id': self.platform_id
