@@ -8,7 +8,7 @@ meta = db.MetaData(bind=con)
 
 def select_from_table(table_name, id=None, show_all=False):
     if id is None:
-        table = db.session.query(MODELS[str(table_name)]).all()
+        table = db.session.query(MODELS[str(table_name).capitalize()]).all()
 
         return [el.get_info_dict() for el in table] if show_all else [el.to_dict() for el in table]
 
@@ -69,12 +69,23 @@ def get_table_info_fields(table_name):
     return table.get_info_dict(table).keys()
 
 
+def check_unique_data_presence(table_name, data, row_id):
+    table = MODELS[table_name]
+    for column_name, value in select_from_table(table_name, row_id).items():
+        c = table.__table__.columns.get(column_name)
+        if c.unique and data[column_name] == value:
+            return True
+    return False
+
+
 def insert_into_table(table_name, data, id=None):
     if not id:
         table_row = MODELS[table_name](*data.values())
         db.session.add(table_row)
         db.session.commit()
     else:
+        if check_unique_data_presence(table_name, data, id):
+            return ValueError
         MODELS[table_name].query.get(id).update(*dict(data).values())
         db.session.commit()
 

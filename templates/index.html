@@ -41,7 +41,7 @@
             <p class="card-text">Price to pay — {{ row['price'] }} UAH</p>
             <form>
                 <button type="submit" class="btn btn-outline-danger btn-sm"
-                        onclick="delete_request(event, '/orders/{{ row['order_id'] }}')">
+                        onclick="timeout_delete_request(event, '/orders/{{ row['order_id'] }}')">
                     Remove
                 </button>
             </form>

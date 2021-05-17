@@ -1,4 +1,4 @@
-USE project_2;
+USE project;
 --
 INSERT INTO Platformtypes (id, type) VALUES
     (1, 'PC'),

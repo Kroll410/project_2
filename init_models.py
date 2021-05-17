@@ -1,5 +1,3 @@
-import sqlalchemy
-
 from init import db
 from config import Config
 import os
@@ -7,7 +5,6 @@ from config import SQL_DIR
 
 con = db.create_engine(Config.SQLALCHEMY_DATABASE_URI, {})
 meta = db.MetaData(bind=con)
-from service import aggregate
 
 
 def init_db():

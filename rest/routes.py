@@ -1,4 +1,5 @@
-from flask import request
+import sqlalchemy.exc
+from flask import request, url_for
 from flask_restful import Resource
 from werkzeug.utils import redirect
 from init import api
@@ -17,7 +18,10 @@ class OrderListApi(Resource):
     def post(self, id=None):
         if request.form:
             if id:
-                crud.insert_into_table('Orders', request.form, id=id)
+                try:
+                    crud.insert_into_table('Orders', request.form, id=id)
+                except ValueError:
+                    return redirect(url_for('edit'))
             else:
                 crud.insert_into_table('Orders', request.form)
             aggregate.set_price_for_orders()

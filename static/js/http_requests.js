@@ -8,3 +8,15 @@ function delete_request(e, url){
         }
     });
 }
+
+
+function timeout_delete_request(e, url){
+    e.preventDefault()
+    $.ajax({
+        url,
+        type: 'DELETE',
+        complete: function(){
+            top.location.href = '/'
+        }
+    });
+}
