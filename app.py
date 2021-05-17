@@ -1,6 +1,5 @@
 from init import app
 from init_models import init_db
 
-if __name__ == '__main__':
-    init_db()
-    app.run()
+init_db()
+app.run(port='5000')

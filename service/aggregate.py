@@ -1,8 +1,8 @@
 from init import db
-from models import Orders, Platforms
+from models.models import Orders, Platforms
 
 
-def _set_price_for_orders():
+def set_price_for_orders():
     id_prices = {}
     for val in db.session.query(Platforms.id, Platforms.price):
         val_id = val[0]
@@ -10,8 +10,6 @@ def _set_price_for_orders():
         id_prices.update({
             db.session.query(Orders.id, Orders.play_time).filter_by(platform_id=val_id).first(): val_price
         })
-
-    print(id_prices)
 
     for key, price in id_prices.items():
         if key is None:

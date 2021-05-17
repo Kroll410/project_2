@@ -1,18 +1,10 @@
-
-
 function delete_request(e, url){
+    e.preventDefault()
     $.ajax({
         url,
         type: 'DELETE',
+        complete: function(){
+            top.location.href = url.split('/').slice(0, -1).join('')
+        }
     });
 }
-
-
-//function put_request(e, url){
-//    e.preventDefault()
-//    $.ajax({
-//        url,
-//        type: 'PUT',
-//    });
-//    console.log(e)
-//}

@@ -1,6 +1,4 @@
-import time
-
-from flask import request, url_for
+from flask import request
 from flask_restful import Resource
 from werkzeug.utils import redirect
 from init import api
@@ -22,13 +20,13 @@ class OrderListApi(Resource):
                 crud.insert_into_table('Orders', request.form, id=id)
             else:
                 crud.insert_into_table('Orders', request.form)
-            aggregate._set_price_for_orders()
+            aggregate.set_price_for_orders()
             return redirect('../show_tables/Orders')
 
     def delete(self, id):
         if id:
             crud.delete_from_table('Orders', id)
-            return redirect(url_for('show_tables'))
+            return
 
 
 class CustomerListApi(Resource):
@@ -51,7 +49,7 @@ class CustomerListApi(Resource):
     def delete(self, id):
         if id:
             crud.delete_from_table('Customers', id)
-            return redirect('customers')
+            return
 
 
 class PlatformListApi(Resource):
@@ -74,7 +72,7 @@ class PlatformListApi(Resource):
     def delete(self, id):
         if id:
             crud.delete_from_table('Platforms', id)
-            return redirect('platforms')
+            return
 
 
 class PlatformTypeListApi(Resource):
@@ -97,7 +95,7 @@ class PlatformTypeListApi(Resource):
     def delete(self, id):
         if id:
             crud.delete_from_table('Platformtypes', id)
-            return redirect('platformtypes')
+            return
 
 
 api.add_resource(OrderListApi, '/orders', '/orders/<id>', strict_slashes=False)

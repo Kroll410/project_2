@@ -1,6 +1,6 @@
 import config
 from init import db
-from models import MODELS
+from models.models import MODELS
 
 con = db.create_engine(config.Config.SQLALCHEMY_DATABASE_URI, {})
 meta = db.MetaData(bind=con)
