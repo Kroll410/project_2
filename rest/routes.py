@@ -1,4 +1,3 @@
-import sqlalchemy.exc
 from flask import request, url_for
 from flask_restful import Resource
 from werkzeug.utils import redirect
@@ -17,13 +16,12 @@ class OrderListApi(Resource):
 
     def post(self, id=None):
         if request.form:
-            if id:
-                try:
-                    crud.insert_into_table('Orders', request.form, id=id)
-                except ValueError:
-                    return redirect(url_for('edit'))
-            else:
-                crud.insert_into_table('Orders', request.form)
+            if not crud.insert_into_table('Orders', request.form, id=id):
+                if id:
+                    return redirect(url_for('edit', table_name='Orders', id=id)), 500
+                else:
+                    return redirect('../show_tables/Orders'), 500
+
             aggregate.set_price_for_orders()
             return redirect('../show_tables/Orders')
 
@@ -43,10 +41,11 @@ class CustomerListApi(Resource):
         return customers, 200
 
     def post(self, id=None):
-        if id:
-            crud.insert_into_table('Customers', request.form, id=id)
-        else:
-            crud.insert_into_table('Customers', request.form)
+        if not crud.insert_into_table('Customers', request.form, id=id):
+            if id:
+                return redirect(url_for('edit', table_name='Customers', id=id)), 500
+            else:
+                return redirect('../show_tables/Customers'), 500
 
         return redirect('../show_tables/Customers')
 
@@ -66,10 +65,11 @@ class PlatformListApi(Resource):
         return platforms, 200
 
     def post(self, id=None):
-        if id:
-            crud.insert_into_table('Platforms', request.form, id=id)
-        else:
-            crud.insert_into_table('Platforms', request.form)
+        if not crud.insert_into_table('Platforms', request.form, id=id):
+            if id:
+                return redirect(url_for('edit', table_name='Platforms', id=id)), 500
+            else:
+                return redirect('../show_tables/Platforms'), 500
 
         return redirect('../show_tables/Platforms')
 
@@ -89,11 +89,12 @@ class PlatformTypeListApi(Resource):
         return platformtypes, 200
 
     def post(self, id=None):
-        if id:
-            crud.insert_into_table('Platformtypes', request.form, id=id)
-        else:
-            crud.insert_into_table('Platformtypes', request.form)
-
+        if not crud.insert_into_table('Platformtypes', request.form, id=id):
+            if id:
+                return redirect(url_for('edit', table_name='Platformtypes', id=id)), 500
+            else:
+                return redirect('../show_tables/PlatformTypes'), 500
+        print('here')
         return redirect('../show_tables/PlatformTypes')
 
     def delete(self, id):
