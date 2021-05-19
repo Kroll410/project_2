@@ -3,6 +3,7 @@ from flask_restful import Resource
 from werkzeug.utils import redirect
 from init import api
 from service import crud_operations as crud, aggregate
+from logging import info
 
 
 class OrderListApi(Resource):
@@ -21,6 +22,9 @@ class OrderListApi(Resource):
                     return redirect(url_for('edit', table_name='Orders', id=id)), 500
                 else:
                     return redirect('../show_tables/Orders'), 500
+
+            if id:
+                info(f'Values at {id} row has been successfully updated in table Orders')
 
             aggregate.set_price_for_orders()
             return redirect('../show_tables/Orders')
@@ -47,6 +51,9 @@ class CustomerListApi(Resource):
             else:
                 return redirect('../show_tables/Customers'), 500
 
+        if id:
+            info(f'Values at {id} row has been successfully updated in table Customers')
+
         return redirect('../show_tables/Customers')
 
     def delete(self, id):
@@ -71,6 +78,9 @@ class PlatformListApi(Resource):
             else:
                 return redirect('../show_tables/Platforms'), 500
 
+        if id:
+            info(f'Values at {id} row has been successfully updated in table Platforms')
+
         return redirect('../show_tables/Platforms')
 
     def delete(self, id):
@@ -94,7 +104,10 @@ class PlatformTypeListApi(Resource):
                 return redirect(url_for('edit', table_name='Platformtypes', id=id)), 500
             else:
                 return redirect('../show_tables/PlatformTypes'), 500
-        print('here')
+
+        if id:
+            info(f'Values at {id} row has been successfully updated in table Platformtypes')
+
         return redirect('../show_tables/PlatformTypes')
 
     def delete(self, id):

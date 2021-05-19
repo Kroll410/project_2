@@ -2,7 +2,7 @@ import unittest
 from app import app
 
 
-class FlaskTestCase(unittest.TestCase):
+class FlaskHTTPTests(unittest.TestCase):
 
     def setUp(self) -> None:
         self.tester = app.test_client(self)

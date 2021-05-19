@@ -1,3 +1,4 @@
+from logging import info
 from service.crud_operations import MODELS
 from datetime import datetime
 
@@ -8,8 +9,10 @@ def get_orders_timeout():
     for order in orders:
         added_time = datetime.strptime(order.added_time, '%Y-%m-%d %H:%M:%S')
         curr_time = datetime.now()
-        # print(' | '.join(str(x) for x in (order.id, order.play_time * 3600, curr_time, added_time, delta)))
         if order.play_time * 3600 < (curr_time - added_time).total_seconds():
+
+            info(
+                f" Ended order: {', '.join(str(x) for x in (order.id, order.play_time * 3600, curr_time, added_time, curr_time - added_time))}")
             timeout_orders.append({
                 'order_id': order.id,
                 'platform_id': order.platform_id,

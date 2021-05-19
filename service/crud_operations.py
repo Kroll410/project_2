@@ -2,6 +2,7 @@ import config
 from init import db
 from models.models import MODELS
 from helpers.validation import VALIDATE
+from logging import info, error
 
 con = db.create_engine(config.Config.SQLALCHEMY_DATABASE_URI, {})
 meta = db.MetaData(bind=con)
@@ -88,9 +89,13 @@ def check_unique_data_presence(table_name, data, row_id=None):
 
 def insert_into_table(table_name, data, id=None):
     if not VALIDATE[table_name](data):
+        error(f'Values {data} has not been inserted into table {str(table_name).capitalize()}. '
+              f'Reason - didn\'t pass validation')
         return False
 
     if check_unique_data_presence(table_name, data, id):
+        error(f'Values {data} has not been inserted into table {str(table_name).capitalize()}. '
+              f'Reason - data already exists in unique constraint column(s)')
         return False
 
     if not id:
@@ -107,6 +112,7 @@ def delete_from_table(table_name, row_id):
     table = MODELS[table_name]
     db.session.query(table).filter(table.id == row_id).delete(synchronize_session=False)
     db.session.commit()
+    info(f'Row with {row_id} id has been successfully deleted from table {str(table_name).capitalize()}')
 
 
 def get_row_data_from_table(table_name, row_id):

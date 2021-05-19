@@ -1,5 +1,6 @@
 from init import db
 from models.models import Orders, Platforms
+from logging import info
 
 
 def set_price_for_orders():
@@ -16,4 +17,7 @@ def set_price_for_orders():
             continue
         order_id, play_time = key
         Orders.query.get(order_id).price = play_time * price
+        info(f'Prices for `{order_id}` order was set to {play_time * price}')
         db.session.commit()
+
+

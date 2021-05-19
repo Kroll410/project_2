@@ -1,0 +1,131 @@
+INFO:root:Dropped all presented tables in database
+INFO:root:Created tables: Customers, Orders, Platforms, Platformtypes
+INFO:root:Query executed: USE project;
+INFO:root:Query executed: INSERT INTO Platformtypes (id, type) VALUES
+    (1, 'PC'),
+    (2, 'Xbox Series X'),
+    (3, 'PlayStation 4'),
+    (4, 'PlayStation 5'),
+    (5, 'Fallout 4 - table game'),
+    (6, 'Civilization V - table game');
+INFO:root:Query executed: INSERT INTO Platforms (price, type_id) VALUES
+    (69, 1),
+    (79, 1),
+    (129, 4),
+    (109, 2),
+    (89, 3),
+    (69, 3),
+    (199, 5),
+    (199, 6);
+INFO:root:Query executed: INSERT INTO Customers (login_name, added_date) VALUES
+    ('some_guy', NOW()),
+    ('Vlad Charul', NOW()),
+    ('Dmytro Karpov', NOW()),
+    ('nighthunetr2000', NOW()),
+    ('Ninja', NOW()),
+    ('Pewdiepie', NOW()),
+    ('zloi_shkolnik', NOW()),
+    ('4eknbItu`', NOW());
+INFO:root:Query executed: INSERT INTO Orders (added_time, play_time, customer_id, platform_id) VALUES
+    (NOW(), 2, 1, 3),
+    (NOW(), 1, 4, 4),
+    (NOW(), 3, 3, 5),
+    (NOW(), 4, 5, 6),
+    (NOW(), 5, 6, 1),
+    (NOW(), 4, 8, 7),
+    (NOW(), 5, 6, 2);
+INFO:root:Query executed: UPDATE Orders AS O JOIN Platforms AS P ON O.platform_id = P.id
+    SET O.price = O.play_time * P.price;
+INFO:root:Prices for `5` order was set to 345.0
+INFO:root:Prices for `7` order was set to 395.0
+INFO:root:Prices for `1` order was set to 258.0
+INFO:root:Prices for `2` order was set to 109.0
+INFO:root:Prices for `3` order was set to 267.0
+INFO:root:Prices for `4` order was set to 276.0
+INFO:root:Prices for `6` order was set to 796.0
+INFO:root:Prices for `8` order was set to 1393.0
+INFO:root:Row with 2 id has been successfully deleted from table Orders
+ERROR:init:Exception on /customers/1 [DELETE]
+Traceback (most recent call last):
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1770, in _execute_context
+    self.dialect.do_execute(
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 717, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/pymysql/cursors.py", line 148, in execute
+    result = self._query(query)
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/pymysql/cursors.py", line 310, in _query
+    conn.query(q)
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/pymysql/connections.py", line 548, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/pymysql/connections.py", line 775, in _read_query_result
+    result.read()
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/pymysql/connections.py", line 1156, in read
+    first_packet = self.connection._read_packet()
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/pymysql/connections.py", line 725, in _read_packet
+    packet.raise_for_error()
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/pymysql/protocol.py", line 221, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/pymysql/err.py", line 143, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.IntegrityError: (1451, 'Cannot delete or update a parent row: a foreign key constraint fails (`project`.`Orders`, CONSTRAINT `Orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `Customers` (`id`))')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/flask/app.py", line 1499, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/flask/app.py", line 1485, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/flask_restful/__init__.py", line 468, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/flask/views.py", line 83, in view
+    return self.dispatch_request(*args, **kwargs)
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/flask_restful/__init__.py", line 583, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/rabb1t/PycharmProjects/project_2/rest/routes.py", line 60, in delete
+    crud.delete_from_table('Customers', id)
+  File "/home/rabb1t/PycharmProjects/project_2/service/crud_operations.py", line 113, in delete_from_table
+    db.session.query(table).filter(table.id == row_id).delete(synchronize_session=False)
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 3124, in delete
+    result = self.session.execute(
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 1677, in execute
+    result = conn._execute_20(statement, params or {}, execution_options)
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1582, in _execute_20
+    return meth(self, args_10style, kwargs_10style, execution_options)
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/sqlalchemy/sql/elements.py", line 329, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1451, in _execute_clauseelement
+    ret = self._execute_context(
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1813, in _execute_context
+    self._handle_dbapi_exception(
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1994, in _handle_dbapi_exception
+    util.raise_(
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/sqlalchemy/util/compat.py", line 211, in raise_
+    raise exception
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1770, in _execute_context
+    self.dialect.do_execute(
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 717, in do_execute
+    cursor.execute(statement, parameters)
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/pymysql/cursors.py", line 148, in execute
+    result = self._query(query)
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/pymysql/cursors.py", line 310, in _query
+    conn.query(q)
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/pymysql/connections.py", line 548, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/pymysql/connections.py", line 775, in _read_query_result
+    result.read()
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/pymysql/connections.py", line 1156, in read
+    first_packet = self.connection._read_packet()
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/pymysql/connections.py", line 725, in _read_packet
+    packet.raise_for_error()
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/pymysql/protocol.py", line 221, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "/home/rabb1t/.local/share/virtualenvs/project_2-E5UG8g41/lib/python3.8/site-packages/pymysql/err.py", line 143, in raise_mysql_exception
+    raise errorclass(errno, errval)
+sqlalchemy.exc.IntegrityError: (pymysql.err.IntegrityError) (1451, 'Cannot delete or update a parent row: a foreign key constraint fails (`project`.`Orders`, CONSTRAINT `Orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `Customers` (`id`))')
+[SQL: DELETE FROM `Customers` WHERE `Customers`.id = %(id_1)s]
+[parameters: {'id_1': '1'}]
+(Background on this error at: http://sqlalche.me/e/14/gkpj)
+INFO:root:Row with 4 id has been successfully deleted from table Customers
+INFO:root:Row with 6 id has been successfully deleted from table Orders
+INFO:root:Row with 9 id has been successfully deleted from table Platforms

@@ -18,7 +18,5 @@ api = Api(app)
 
 from init_models import init_db
 
-# init_db()
-
 from rest import routes
 from views import views
