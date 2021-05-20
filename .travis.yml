@@ -1,5 +1,7 @@
 language: python
 before_install:
-  - pipenv sync
+  - pip install -r requirements.txt
 python:
   - "3.8"
+script:
+  - gunicorn app:app
