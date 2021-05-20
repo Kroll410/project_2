@@ -1,18 +1,28 @@
 from logging import info
-from service.crud_operations import MODELS
 from datetime import datetime
+from service.crud_operations import MODELS
 
 
 def get_orders_timeout():
+    """
+    Function provides checking of expired orders at service.
+    It retrieves all orders in current database in table `Orders` and
+        looks for expired ones by `play_time` and `added_time` columns` values
+
+    :return: list of dictionaries with data to process expired orders
+    """
     orders = MODELS['Orders'].query.all()
     timeout_orders = []
     for order in orders:
         added_time = datetime.strptime(order.added_time, '%Y-%m-%d %H:%M:%S')
         curr_time = datetime.now()
         if order.play_time * 3600 < (curr_time - added_time).total_seconds():
-
-            info(
-                f" Ended order: {', '.join(str(x) for x in (order.id, order.play_time * 3600, curr_time, added_time, curr_time - added_time))}")
+            txt = ', '.join(str(x) for x in (order.id,
+                                             order.play_time * 3600,
+                                             curr_time, added_time,
+                                             curr_time - added_time)
+                            )
+            info(f" Ended order: {txt}")
             timeout_orders.append({
                 'order_id': order.id,
                 'platform_id': order.platform_id,

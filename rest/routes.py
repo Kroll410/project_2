@@ -1,3 +1,8 @@
+"""
+Module routes.py consists of API of models in service
+"""
+
+
 from flask import request, url_for
 from flask_restful import Resource
 from werkzeug.utils import redirect

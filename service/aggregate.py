@@ -1,9 +1,21 @@
+
+"""
+Module aggregate.py consists of aggregation functions
+    to be used for updating values in tables
+"""
+
 from init import db
 from models.models import Orders, Platforms
 from logging import info
 
 
 def set_price_for_orders():
+    """
+    Function updates `price` column values in `Orders` table, aggregated by
+        `play_time` value and price for each `platform.id`
+        price = play_time * platform.price
+    :return:
+    """
     id_prices = {}
     for val in db.session.query(Platforms.id, Platforms.price):
         val_id = val[0]

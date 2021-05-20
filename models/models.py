@@ -1,3 +1,8 @@
+"""
+Module models.py consists of 4 table model to be used in admin service
+    `Customers`, `Platforms`, `Orders`, `Platformtypes`
+"""
+
 from init import db, dt
 
 

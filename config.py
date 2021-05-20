@@ -1,3 +1,7 @@
+"""
+Module config.py consists of configuration set ups for logging and SQLAlchemy package
+"""
+
 import pathlib
 import logging
 

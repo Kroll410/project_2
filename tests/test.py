@@ -1,3 +1,7 @@
+"""
+Module test.py provides unittests to test service
+"""
+
 import unittest
 from app import app
 

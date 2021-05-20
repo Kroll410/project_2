@@ -1,3 +1,7 @@
+"""
+Module init_models.py consist of function to populate database with sample data
+"""
+
 import sqlalchemy.exc
 
 from init import db
@@ -10,6 +14,11 @@ meta = db.MetaData(bind=con)
 
 
 def init_db():
+    """
+    Function performs reading .sql file and executing SQL code
+        that populates data to database
+    :return:
+    """
     db.drop_all()
     info('Dropped all presented tables in database')
     db.create_all()

@@ -1,4 +1,9 @@
+"""
+Module init.py consists of set up of all needed packages
+"""
+
 from flask import Flask
+
 import flask.scaffold
 
 flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
