@@ -12,6 +12,7 @@ flask-pymysql = "*"
 requests = "*"
 gunicorn = "*"
 pylint = "*"
+wheel = "*"
 
 [dev-packages]
 
