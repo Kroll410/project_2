@@ -14,9 +14,7 @@ with open(f'{LOGS_DIR}', 'w+') as log_file:
 
 
 class Config:
-    from os import getenv
+    from os import environ
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     # SQLALCHEMY_DATABASE_URI = 'postgresql+pg8000://test:12345@localhost/project'
-    SQLALCHEMY_DATABASE_URI = getenv("DATABASE_URL")
-    if SQLALCHEMY_DATABASE_URI.startswith("postgres://"):
-        SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI.replace("postgres://", "postgres://pbxnwtrzglyhug:9a2dfd04fb09d5ef460ff222ac791079acc438ba00496be10d421c7d797c65b1@ec2-52-50-171-4.eu-west-1.compute.amazonaws.com:5432/d4ol145u7ksscg", 1)
+    SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
