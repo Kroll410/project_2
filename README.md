@@ -34,7 +34,7 @@ Change:
 - `12345` to your password
 - `project` to your database name
 
->> Also, if you changed the database name, you have to change the line in population SQL script.
+> Also, if you changed the database name, you have to change the line in population SQL script.
 In `sql/insert_data.sql` the first line: `USE project;` to `USE your_database_name;`
 
 # Running the app
