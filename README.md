@@ -8,9 +8,14 @@ Here is a step-by-step tutorial to make app run on your machine.
 Clone project to your folder and install required packages from `requirments.txt` or `Pipfile.lock` files
 ```
 git init
+```
+```
 git clone https://github.com/Kroll410/project_2
+```
+```
 cd project_2
-
+```
+```
 pip install -r requirements.txt 
     OR
 pipenv install
