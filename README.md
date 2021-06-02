@@ -2,22 +2,22 @@
 
 # This is a test project for EPAM Python [OnlineUA] Winter 2021 
 Also, you can check specification of the project via `specification.pdf` file in project folder.
-Here is a step-by-step tutorial to make app run on your machine.
+Here are the step-by-step tutorial make app run on your machine.
 
 # Installation
-Clone project to your folder and install required packages from `requirments.txt` or `Pipfile.lock` files
+Clone project to your folder
 ```
 git init
-```
-```
 git clone https://github.com/Kroll410/project_2
-```
-```
 cd project_2
 ```
+
+Install required packages from `requirments.txt` or `Pipfile.lock` files
 ```
 pip install -r requirements.txt 
-    OR
+```
+or
+```
 pipenv install
 ```
 
