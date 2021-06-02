@@ -2,7 +2,6 @@
 Module routes.py consists of API of models in service
 """
 
-
 from flask import request, url_for
 from flask_restful import Resource
 from werkzeug.utils import redirect
@@ -52,9 +51,9 @@ class CustomerListApi(Resource):
     def post(self, id=None):
         if not crud.insert_into_table('Customers', request.form, id=id):
             if id:
-                return redirect(url_for('edit', table_name='Customers', id=id)), 500
+                redirect(url_for('edit', table_name='Customers', id=id)), 500
             else:
-                return redirect('../show_tables/Customers'), 500
+                redirect('../show_tables/Customers'), 500
 
         if id:
             info(f'Values at {id} row has been successfully updated in table Customers')

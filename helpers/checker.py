@@ -12,11 +12,12 @@ def get_orders_timeout():
     :return: list of dictionaries with data to process expired orders
     """
     orders = MODELS['Orders'].query.all()
+    HOUR_SECONDS = 3600
     timeout_orders = []
     for order in orders:
         added_time = datetime.strptime(order.added_time, '%Y-%m-%d %H:%M:%S')
         curr_time = datetime.now()
-        if order.play_time * 3600 < (curr_time - added_time).total_seconds():
+        if order.play_time * HOUR_SECONDS < (curr_time - added_time).total_seconds():
             txt = ', '.join(str(x) for x in (order.id,
                                              order.play_time * 3600,
                                              curr_time, added_time,

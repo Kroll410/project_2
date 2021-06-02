@@ -101,7 +101,7 @@ def get_table_info_fields_data(table_name):
     return table.get_info_dict(table).keys()
 
 
-def check_unique_data_presence(table_name, data, row_id=None):
+def check_unique_data_presence(table_name, data):
     """
     Function checks data presence for unique constraint columns in table
     :param table_name: name of specific table
@@ -110,17 +110,12 @@ def check_unique_data_presence(table_name, data, row_id=None):
     :return: True if data is already exists False otherwise
     """
     table = MODELS[table_name]
-    if row_id:
-        for column_name, value in select_from_table(table_name, row_id).items():
+
+    for row in select_from_table(table_name):
+        for column_name, value in row.items():
             c = table.__table__.columns.get(column_name)
             if c.unique and data[column_name] == value:
                 return True
-    else:
-        for row in select_from_table(table_name, row_id):
-            for column_name, value in row.items():
-                c = table.__table__.columns.get(column_name)
-                if c.unique and data[column_name] == value:
-                    return True
 
     return False
 
@@ -138,9 +133,10 @@ def insert_into_table(table_name, data, id=None):
               f'Reason - didn\'t pass validation')
         return False
 
-    if check_unique_data_presence(table_name, data, id):
+    if check_unique_data_presence(table_name, data):
         error(f'Values {data} has not been inserted into table {str(table_name).capitalize()}. '
               f'Reason - data already exists in unique constraint column(s)')
+        print('unique')
         return False
 
     if not id:

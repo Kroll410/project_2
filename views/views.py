@@ -31,8 +31,7 @@ def show_tables(table_name=None):
             table_name = str(table_name).capitalize()
             table_data = crud.select_from_table(table_name, show_all=True)
             is_empty = True if not table_data else False
-            fields = crud.get_table_fields_data(table_name) if not is_empty else []
-
+            fields = crud.get_table_info_fields_data(table_name) if not is_empty else []
             timeout = get_orders_timeout()
 
             return render_template('show-tables.html', data={
